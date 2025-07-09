@@ -28,7 +28,7 @@ layers:
   - P
   - {t: \, s: '|'}
   - {t: '$$mdi:transfer$$', type: trans}
-  - '&my_td_l'
+  - {t: A, h: '$$mdi:apple-keyboard-shift$$'}
   - {t: S, h: '$$mdi:apple-keyboard-control$$'}
   - {t: D, h: '$$mdi:apple-keyboard-option$$'}
   - {t: F, h: '$$mdi:apple-keyboard-command$$'}
@@ -38,7 +38,7 @@ layers:
   - {t: J, h: '$$mdi:apple-keyboard-command$$'}
   - {t: K, h: '$$mdi:apple-keyboard-option$$'}
   - {t: L, h: '$$mdi:apple-keyboard-control$$'}
-  - '&my_td_r'
+  - {t: ;, h: '$$mdi:apple-keyboard-shift$$', s: ':'}
   - {t: '''', s: '"'}
   - {t: '$$mdi:transfer$$', type: trans}
   - Z
@@ -260,3 +260,6 @@ layers:
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
+combos:
+- p: [27, 37]
+  k: $$mdi:apple-keyboard-caps$$
