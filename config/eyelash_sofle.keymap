@@ -47,20 +47,6 @@
             display-name = "Mod-Tap2";
         };
 
-        #my_td_l: tap_dance_mod_tap_l {
-        #    compatible = "zmk,behavior-tap-dance";
-        #    #binding-cells = <0>;
-        #    tapping-term-ms = <150>;
-        #    bindings = <&my_mt LSHIFT A>, <&kp CAPS>;
-        #};
-
-        #my_td_r: tap_dance_mod_tap_r {
-        #    compatible = "zmk,behavior-tap-dance";
-        #    #binding-cells = <0>;
-        #    tapping-term-ms = <150>;
-        #    bindings = <&my_mt RSHIFT SEMI>, <&kp CAPS>;
-        #};
-
         combos {
             compatible = "zmk,combos";
             combo_caps {
