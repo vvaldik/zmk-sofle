@@ -59,13 +59,13 @@
                 timeout-ms = <150>;
                 key-positions = <26 59>;
                 bindings = <&kp BACKSPACE>;
-            }
+            };
             
             combo_backspace {
                 timeout-ms = <150>;
                 key-positions = <38 57>;
                 bindings = <&kp DELETE>;
-            }
+            };
         };
     };
 
