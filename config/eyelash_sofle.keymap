@@ -42,7 +42,7 @@
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
             flavor = "tap-preferred";
-            tapping-term-ms = <330>;
+            tapping-term-ms = <100>;
             bindings = <&kp>, <&kp>;
             display-name = "Mod-Tap2";
         };
@@ -50,10 +50,22 @@
         combos {
             compatible = "zmk,combos";
             combo_caps {
-                timeout-ms = <50>;
+                timeout-ms = <150>;
                 key-positions = <27 37>;
                 bindings = <&kp CAPS>;
             };
+
+            combo_backspace {
+                timeout-ms = <150>;
+                key-positions = <26 59>;
+                bindings = <&kp BACKSPACE>;
+            }
+            
+            combo_backspace {
+                timeout-ms = <150>;
+                key-positions = <38 57>;
+                bindings = <&kp DELETE>;
+            }
         };
     };
 
@@ -64,8 +76,8 @@
             bindings = <
 &kp ESC     &kp N1           &kp N2           &kp N3             &kp N4             &kp N5         &kp UP_ARROW         &kp N6     &kp N7             &kp N8             &kp N9           &kp N0              &kp BACKSPACE
 &kp TAB     &kp Q            &kp W            &kp E              &kp R              &kp T          &kp DOWN_ARROW       &kp Y      &kp U              &kp I              &kp O            &kp P               &kp BSLH
-&trans      &my_mt LSHIFT A  &my_mt LCTRL S   &my_mt LEFT_ALT D  &my_mt LEFT_GUI F  &kp G          &kp LEFT_ARROW       &kp H      &my_mt LEFT_GUI J  &my_mt LEFT_ALT K  &my_mt RCTRL L   &my_mt RSHIFT SEMI  &kp APOS
-&trans      &kp Z            &kp X            &kp C              &kp V              &kp B          &kp RIGHT_ARROW      &kp N      &kp M              &kp COMMA          &kp DOT          &kp FSLH            &trans
+&kp LSHIFT  &kp A            &my_mt LCTRL S   &my_mt LEFT_ALT D  &my_mt LEFT_GUI F  &kp G          &kp LEFT_ARROW       &kp H      &my_mt LEFT_GUI J  &my_mt LEFT_ALT K  &my_mt RCTRL L   &kp SEMI            &kp RSHIFT
+&kp GRAVE   &kp Z            &kp X            &kp C              &kp V              &kp B          &kp RIGHT_ARROW      &kp N      &kp M              &kp COMMA          &kp DOT          &kp FSLH            &kp APOS
 &kp C_MUTE  &kp LCTRL        &kp LEFT_GUI     &kp LEFT_ALT       &mo 1              &kp SPACE      &kp ENTER            &kp SPACE  &kp ENTER          &mo 2              &kp RIGHT_SHIFT  &kp DELETE
             >;
 
