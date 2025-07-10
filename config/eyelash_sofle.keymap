@@ -51,7 +51,7 @@
             compatible = "zmk,combos";
             combo_caps {
                 timeout-ms = <150>;
-                key-positions = <27 37>;
+                key-positions = <26 38>;
                 bindings = <&kp CAPS>;
             };
 
@@ -61,7 +61,7 @@
                 bindings = <&kp BACKSPACE>;
             };
             
-            combo_backspace {
+            combo_del {
                 timeout-ms = <150>;
                 key-positions = <38 57>;
                 bindings = <&kp DELETE>;
