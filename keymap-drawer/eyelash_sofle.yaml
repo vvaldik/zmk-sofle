@@ -58,9 +58,9 @@ layers:
   - $$mdi:apple-keyboard-command$$
   - $$mdi:apple-keyboard-option$$
   - layer1
-  - $$mdi:keyboard-space$$
+  - {t: '$$mdi:keyboard-space$$', s: '$$mdi:backspace-reverse-outline$$'}
   - {t: '$$mdi:keyboard-return$$', type: enter}
-  - $$mdi:keyboard-space$$
+  - {t: '$$mdi:keyboard-space$$', s: '$$mdi:backspace$$'}
   - {t: '$$mdi:keyboard-return$$', type: enter}
   - '2'
   - $$mdi:apple-keyboard-shift$$
@@ -263,7 +263,3 @@ layers:
 combos:
 - p: [26, 38]
   k: $$mdi:apple-keyboard-caps$$
-- p: [26, 59]
-  k: {t: '$$mdi:backspace$$', type: backspace}
-- p: [38, 57]
-  k: $$mdi:backspace-reverse-outline$$
