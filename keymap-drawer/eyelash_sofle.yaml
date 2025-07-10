@@ -261,7 +261,7 @@ layers:
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
 combos:
-- p: [27, 37]
+- p: [26, 38]
   k: $$mdi:apple-keyboard-caps$$
 - p: [26, 59]
   k: {t: '$$mdi:backspace$$', type: backspace}
