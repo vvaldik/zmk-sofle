@@ -57,7 +57,7 @@ layers:
   - $$mdi:apple-keyboard-control$$
   - $$mdi:apple-keyboard-option$$
   - LGUI
-  - layer1
+  - LAYER4
   - {t: '$$mdi:keyboard-space$$', s: '$$mdi:backspace-reverse-outline$$'}
   - {t: LAYER0, h: toggle, s: LAYER4}
   - {t: '$$mdi:keyboard-space$$', s: '$$mdi:backspace$$'}
@@ -122,7 +122,7 @@ layers:
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
-  - {type: held}
+  - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:transfer$$', type: trans}
@@ -317,7 +317,7 @@ layers:
   - $$mdi:apple-keyboard-control$$
   - $$mdi:apple-keyboard-option$$
   - LGUI
-  - layer1
+  - {t: layer1, type: held}
   - {t: '$$mdi:keyboard-space$$', s: '$$mdi:backspace-reverse-outline$$'}
   - {t: LAYER0, h: toggle, s: LAYER4}
   - {t: '$$mdi:keyboard-space$$', s: '$$mdi:backspace$$'}
@@ -379,14 +379,14 @@ layers:
   - {t: Sft+/, s: 'Sft+?', type: held}
   - $$mdi:apple-keyboard-shift$$
   - $$mdi:volume-off$$
-  - $$mdi:apple-keyboard-control$$
-  - $$mdi:apple-keyboard-option$$
-  - LGUI
-  - layer1
+  - {t: \, s: '|'}
+  - {t: Sft+\, s: Sft+|}
+  - {t: /, s: '?'}
+  - {t: layer1, type: held alternate}
   - {t: '$$mdi:keyboard-space$$', s: '$$mdi:backspace-reverse-outline$$'}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:keyboard-space$$', s: '$$mdi:backspace$$'}
   - {t: '$$mdi:keyboard-return$$', h: LGUI}
-  - {t: \, s: '|'}
-  - {t: Sft+\, s: Sft+|}
-  - {t: /, s: '?'}
+  - RGUI
+  - $$mdi:apple-keyboard-option$$
+  - $$mdi:apple-keyboard-control$$
