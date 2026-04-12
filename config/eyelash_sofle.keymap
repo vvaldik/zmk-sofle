@@ -28,6 +28,8 @@
 #define ent 12 // Enter layer
 #define sp_l 13
 #define sp_r 14
+#define fnLn 15 // fnL variant for l_fn tap-then-hold (F-keys + numbers on right)
+#define fnRn 16 // fnR variant for r_fn tap-then-hold (F-keys + numbers on left)
 
 // Shorthand for space layer taps
 #define l_sp ltr sp_l SPACE
@@ -40,8 +42,26 @@
 #define bt_0 bt BT_SEL 0
 #define bt_1 bt BT_SEL 1
 #define bt_2 bt BT_SEL 2
-#define bt_3 bt BT_SEL 3 
+#define bt_3 bt BT_SEL 3
 #define bt_4 bt BT_SEL 4
+
+// macOS F-row consumer codes — what each F-key normally does on a Mac.
+// Useful when the OS-level F-key remapping isn't enabled and we want the
+// "media key" behaviour directly. F5/F6 default to old-Mac keyboard
+// backlight (modern Macs use Dictation/Do-Not-Disturb, which have no
+// standard HID consumer codes — Karabiner is required for those).
+#define _F1  C_BRI_DEC                       // Display brightness down
+#define _F2  C_BRI_INC                       // Display brightness up
+#define _F3  C_AC_DESKTOP_SHOW_ALL_WINDOWS   // Mission Control
+#define _F4  C_AC_SEARCH                     // Spotlight
+#define _F5  ZMK_HID_USAGE(HID_USAGE_CONSUMER, 0x7A) // Keyboard brightness down
+#define _F6  ZMK_HID_USAGE(HID_USAGE_CONSUMER, 0x79) // Keyboard brightness up
+#define _F7  C_PREV                          // Previous track
+#define _F8  C_PP                            // Play / Pause
+#define _F9  C_NEXT                          // Next track
+#define _F10 C_MUTE                          // Mute
+#define _F11 C_VOL_DN                        // Volume down
+#define _F12 C_VOL_UP                        // Volume up
 
 &uc {
   default-mode = <UC_MODE_MACOS>;  // Default to Macos input system
@@ -277,6 +297,27 @@
             ignore-numbers;
         };
 
+        // Isolated hold-tap (custom, in zmk-iso-hold-tap module). Used as
+        // the 2nd-tap binding of td_shift_caps to distinguish double-tap
+        // (tap = caps_layer caps) from tap-then-hold (hold = mo fnLn).
+        // It can safely live at the same physical position as fn_sh_caps
+        // because it maintains its own active-state array.
+        caps_or_fnLn: caps_or_fnLn {
+            compatible = "zmk,behavior-iso-hold-tap";
+            #binding-cells = <0>;
+            tapping-term-ms = <200>;
+            bindings = <&caps_layer caps>, <&mo fnLn>;
+        };
+
+        // Same pattern for r_fn: 2nd-tap of td_shift_nums distinguishes
+        // double-tap (tap = num_word num) from tap-then-hold (hold = mo fnRn).
+        nums_or_fnRn: nums_or_fnRn {
+            compatible = "zmk,behavior-iso-hold-tap";
+            #binding-cells = <0>;
+            tapping-term-ms = <200>;
+            bindings = <&num_word num>, <&mo fnRn>;
+        };
+
         my_mt: my_mod_tap {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
@@ -340,31 +381,41 @@
             compatible = "zmk,behavior-tap-dance";
             #binding-cells = <0>;
             tapping-term-ms = <500>;
-            bindings = <&sk LSHIFT>, <&caps_layer caps>;
+            bindings = <&sk LSHIFT>, <&caps_or_fnLn>;
         };
 
-        // Hold-tap: hold = mo LYR, tap = tap-dance (shift/caps_word/caps)
+        // Hold-tap: hold = mo LYR, tap = tap-dance (shift / caps / fnLn).
+        // quick-tap-ms forces a 2nd press within 500ms of release into the
+        // tap path, so the tap-dance can see it (required for the
+        // tap-then-hold → fnLn flow). Side effect: re-holding l_fn within
+        // 500ms of releasing it will NOT activate mo fnL.
         fn_sh_caps: fn_layer_shift {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
             tapping-term-ms = <200>;
+            quick-tap-ms = <500>;
             flavor = "balanced";
             bindings = <&mo>, <&td_shift_caps>;
         };
 
-        // Tap-dance: 1 tap = symbols, 2 taps = num word
+        // Tap-dance: 1 tap = symbols, 2 taps = num word / fnRn (via iso-hold-tap)
         td_shift_nums: tap_dance_shift_nums {
             compatible = "zmk,behavior-tap-dance";
             #binding-cells = <0>;
             tapping-term-ms = <500>;
-            bindings = <&num_word symb>, <&num_word num>;
+            bindings = <&num_word symb>, <&nums_or_fnRn>;
         };
 
-        // Hold-tap: hold = mo LYR, tap = tap-dance (shift/num_word)
+        // Hold-tap: hold = mo LYR, tap = tap-dance (shift / num / fnRn).
+        // quick-tap-ms forces a 2nd press within 500ms of release into the
+        // tap path so the tap-dance can see it (required for the
+        // tap-then-hold → fnRn flow). Side effect: re-holding r_fn within
+        // 500ms of releasing it will NOT activate mo fnR.
         fn_sh_nums: fn_layer_shift_nums {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
             tapping-term-ms = <200>;
+            quick-tap-ms = <500>;
             flavor = "balanced";
             bindings = <&mo>, <&td_shift_nums>;
         };
@@ -533,6 +584,32 @@
 &lt num GRAVE    &skp A      &skp S     &skp D     &skp F    &skp G    &skp LEFT_ARROW   &skp H   &skp J         &skp K      &skp L     &skp SEMI       &skp APOS
 &skp ESC         &skp Z      &skp X     &skp C     &skp V    &skp B    &skp RIGHT_ARROW  &skp N   &skp M         &skp COMMA  &skp DOT   &skp FSLH       &skp ENTER
 &kp C_MUTE       &none       &none      &none      &kp DEL   &none     &to nav           &none    &none          &none       &none      &none
+            >;
+        };
+
+        // fnL variant: same left-hand modifiers (shift/ctrl/alt/gui on asdf)
+        // but right hand has F-keys on yuiop\ and digits on hjkl;.
+        // Activated by tap-then-hold of l_fn (see caps_or_fnLn).
+        fnLn {
+            bindings = <
+&trans  &trans      &trans      &trans      &trans      &trans      &trans  &trans   &trans   &trans   &trans   &trans    &kp F12
+&trans  &trans      &trans      &trans      &trans      &trans      &trans  &kp F6   &kp F7   &kp F8   &kp F9   &kp F10   &kp F11
+&trans  &kp LSHIFT  &kp LCTRL   &kp LALT    &kp RGUI    &trans      &trans  &kp N6   &kp N7   &kp N8   &kp N9   &kp N0    &kp _F12
+&trans  &trans      &trans      &trans      &trans      &trans      &trans  &kp _F6  &kp _F7  &kp _F8  &kp _F9  &kp _F10  &kp _F11
+&trans  &trans      &trans      &trans      &trans      &trans      &trans  &trans   &trans   &trans   &trans   &trans
+            >;
+        };
+
+        // Mirror of fnLn for r_fn: keeps fnR's right-hand modifiers
+        // (gui/alt/ctrl/shift on jkl;) and adds F-keys on qwert and digits
+        // on asdfg. Activated by tap-then-hold of r_fn (see nums_or_fnRn).
+        fnRn {
+            bindings = <
+&trans   &trans    &trans   &trans   &trans   &trans   &trans   &trans   &trans      &trans      &trans      &trans      &trans
+&trans   &kp F1    &kp F2   &kp F3   &kp F4   &kp F5   &trans   &trans   &trans      &trans      &trans      &trans      &trans
+&trans   &kp N1    &kp N2   &kp N3   &kp N4   &kp N5   &trans   &trans   &kp RGUI    &kp RALT    &kp RCTRL   &kp RSHIFT  &trans
+&trans   &kp _F1   &kp _F2  &kp _F3  &kp _F4  &kp _F5  &trans   &trans   &trans      &trans      &trans      &trans      &trans
+&trans   &trans    &trans   &trans   &trans   &trans   &trans   &trans   &trans      &trans      &trans      &trans
             >;
         };
     };
