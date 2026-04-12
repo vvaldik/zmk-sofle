@@ -8,13 +8,21 @@ manifest:
       # - https://docs.zephyrproject.org/3.5.0/develop/west/manifest.html#projects
     - name: gpeye
       url-base: https://github.com/GPeye
+    - name: urob
+      url-base: https://github.com/urob
   projects:
     - name: mario-peripheral-animation
       remote: gpeye
-      revision: main 
+      revision: main
     - name: zmk
       remote: zmkfirmware
       revision: main
       import: app/west.yml
+    - name: zmk-auto-layer
+      remote: urob
+      revision: main # set to same version as zmk above
+    - name: zmk-unicode
+      remote: urob
+      revision: main
   self:
     path: boards
