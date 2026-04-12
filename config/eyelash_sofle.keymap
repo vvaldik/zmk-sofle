@@ -201,6 +201,38 @@
             >;
         };
 
+        // Used on the num layer in place of r_fn. While num_word num is
+        // active, this gives momentary fnR access on hold (so r_fn + ; →
+        // RSHIFT, like base) and always deactivates num_word on release.
+        // num_word must be deactivated *before* mo fnR — the num layer (6)
+        // has a higher index than fnR (4), so it would otherwise shadow it.
+        exit_num: exit_num {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            wait-ms = <0>;
+            tap-ms = <0>;
+            bindings
+                = <&macro_tap &num_word num>
+                , <&macro_press &mo fnR>
+                , <&macro_pause_for_release>
+                , <&macro_release &mo fnR>
+                ;
+        };
+
+        // Same as exit_num but for the symb layer.
+        exit_symb: exit_symb {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            wait-ms = <0>;
+            tap-ms = <0>;
+            bindings
+                = <&macro_tap &num_word symb>
+                , <&macro_press &mo fnR>
+                , <&macro_pause_for_release>
+                , <&macro_release &mo fnR>
+                ;
+        };
+
         cmd_space: cmd_space_macro {
             compatible = "zmk,behavior-macro";
             label = "CMD_SPACE";
@@ -399,7 +431,7 @@
 &kp TAB          &kp LS(N1)       &kp LS(N2)       &kp LS(N3)         &kp LS(N4)         &kp LS(N5)     &kp DOWN_ARROW       &kp LS(N6)     &kp LS(N7)          &kp LS(BSLH)        &kp LS(N9)       &kp LS(N0)          &none
 &none            &kp N1           &kp N2           &kp N3             &kp N4             &kp N5         &kp LEFT_ARROW       &kp N6         &kp N7              &kp N8              &kp N9           &kp N0              &kp EQUAL
 &kp ESC          &uc 0x1F596 0    &none            &none              &none              &none          &kp RIGHT_ARROW      &none          &kp PLUS            &kp COMMA           &kp DOT          &ltr skbL FSLH      &lt ent ENTER
-&kp C_MUTE       &none            &none            &trans             &l_sp              &none          &none                &none          &r_sp               &trans              &none            &none
+&kp C_MUTE       &none            &none            &trans             &l_sp              &none          &none                &none          &r_sp               &exit_num           &none            &none
             >;
         };
 
@@ -409,7 +441,7 @@
 &none            &kp N1           &kp N2           &kp N3             &kp N4             &kp N5         &kp DOWN_ARROW       &kp N6         &kp N7              &kp N8              &kp N9           &kp N0              &kp LS(F14)
 &none            &kp LS(N1)       &kp LS(N2)       &kp LS(N3)         &kp LS(N4)         &kp LS(N5)     &kp LEFT_ARROW       &kp LS(N6)     &kp LS(N7)          &kp LS(N8)          &kp LS(N9)       &kp LS(N0)          &kp LS(F14)
 &kp ESC          &kp LS(N1)       &kp LS(N2)       &kp LS(N3)         &kp LS(N4)         &kp LS(N5)     &kp RIGHT_ARROW      &kp LS(N6)     &kp LS(N7)          &kp LS(BSLH)        &kp LS(N9)       &kp LS(N0)          &kp LS(F14)
-&kp C_MUTE       &none            &none            &trans             &l_sp              &none          &none                &none          &r_sp               &trans              &none            &none
+&kp C_MUTE       &none            &none            &trans             &l_sp              &none          &none                &none          &r_sp               &exit_symb          &none            &none
             >;
         };
 
