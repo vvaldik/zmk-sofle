@@ -52,10 +52,15 @@
 // standard HID consumer codes — Karabiner is required for those).
 #define _F1  C_BRI_DEC                       // Display brightness down
 #define _F2  C_BRI_INC                       // Display brightness up
-#define _F3  C_AC_DESKTOP_SHOW_ALL_WINDOWS   // Mission Control
+#define _F3  LC(UP)                          // Mission Control (Ctrl+Up shortcut)
 #define _F4  C_AC_SEARCH                     // Spotlight
-#define _F5  ZMK_HID_USAGE(HID_USAGE_CONSUMER, 0x7A) // Keyboard brightness down
-#define _F6  ZMK_HID_USAGE(HID_USAGE_CONSUMER, 0x79) // Keyboard brightness up
+// _F5 (Dictation/microphone) and _F6 (Focus/Do-Not-Disturb) have no HID
+// consumer codes macOS honours — they use Apple's vendor-private usage
+// page. Workaround: send hyper+F5 / hyper+F6 and assign those shortcuts
+// in macOS Settings → Keyboard → (Dictation / Keyboard Shortcuts →
+// Mission Control → Turn Do Not Disturb On/Off).
+#define _F5  LC(LA(LG(LS(F5))))              // Dictation (macOS hyper+F5 shortcut)
+#define _F6  LC(LA(LG(LS(F6))))              // Focus / DND (macOS hyper+F6 shortcut)
 #define _F7  C_PREV                          // Previous track
 #define _F8  C_PP                            // Play / Pause
 #define _F9  C_NEXT                          // Next track
@@ -86,10 +91,6 @@
 &sk {
     release-after-ms = <1000>; // auto-release after 1000ms if no key pressed
     quick-release;             // release immediately after next key press
-};
-
-&num_word {
-  continue-list = <BACKSPACE DELETE DOT COMMA MINUS PLUS EQUAL UNDERSCORE SLASH>;
 };
 
 / {
@@ -292,7 +293,6 @@
         caps_layer: caps_layer {
             compatible = "zmk,behavior-auto-layer";
             #binding-cells = <1>;
-            continue-list = <BACKSPACE DELETE UNDERSCORE>;
             ignore-alphas;
             ignore-numbers;
         };
@@ -425,7 +425,7 @@
     keymap {
         compatible = "zmk,keymap";
 
-
+//TODO: find place for left/right brackets
 
 // Key indexes
 // #00 ESC       #01 1            #02 2            #03 3              #04 4              #05 5          #06 UP             #07 6      #08 7           #09 8        #10 9      #11 0       #12 -
@@ -434,19 +434,19 @@
 // #39 LSH       #40 Z            #41 X            #42 C              #43 V              #44 B          #45 RIGHT          #46 N      #47 M           #48 <        #49 >      #50 /       #51 RSH
 // #52 ??        #53 CTRL         #54 OPT          #55 CMD            #56 LFN            #57 SP         #58 CLICK          #59 SP     #60 RFN         #61 CMD      #62 OPT    #63 CTRL
 
-        base {
+        base {//       -           -           -           -           -           base            -           -           -           -           -           base           -           -           -           -           -           base
             bindings = <
 &none            &kp N1     &kp N2    &kp N3     &kp N4    &kp N5       &kp UP_ARROW       &kp N6    &kp N7      &kp N8     &kp N9    &kp N0          &kp  MINUS
-&kp TAB          &kp Q      &kp W     &kp E      &kp R     &kp T        &kp DOWN_ARROW     &kp Y     &kp U       &kp I      &kp O     &kp P           &kp  BSLH
-&lt num GRAVE    &kp A      &kp S     &kp D      &kp F     &kp G        &kp LEFT_ARROW     &kp H     &kp J       &kp K      &kp L     &kp SEMI        &kp  APOS
+&lt num GRAVE    &kp Q      &kp W     &kp E      &kp R     &kp T        &kp DOWN_ARROW     &kp Y     &kp U       &kp I      &kp O     &kp P           &kp  BSLH
+&kp TAB          &kp A      &kp S     &kp D      &kp F     &kp G        &kp LEFT_ARROW     &kp H     &kp J       &kp K      &kp L     &kp SEMI        &kp  APOS
 &lt esc ESC      &kp Z      &kp X     &kp C      &kp V     &kp B        &kp RIGHT_ARROW    &kp N     &kp M       &kp COMMA  &kp DOT   &ltr skbL FSLH  &lt ent ENTER
 &kp C_MUTE       &kp LCTRL  &kp LALT  &l_fn      &l_sp     &kp LBKT     &tonav             &kp BSLH  &r_sp       &r_fn      &kp RALT  &kp RCTRL
             >;
         };
 
-        caps {
+        caps {//       -           -           -           -           -           caps            -           -           -           -           -           caps            -           -           -           -           -          caps
             bindings = <
-&trans           &trans     &trans    &trans     &trans    &trans       &trans             &trans    &trans      &trans     &trans    &trans          &trans
+&kp LS(MINUS)    &trans     &trans    &trans     &trans    &trans       &trans             &trans    &trans      &trans     &trans    &trans          &kp  MINUS
 &trans           &kp LS(Q)  &kp LS(W) &kp LS(E)  &kp LS(R) &kp LS(T)    &trans             &kp LS(Y) &kp LS(U)   &kp LS(I)  &kp LS(O) &kp LS(P)       &trans
 &trans           &kp LS(A)  &kp LS(S) &kp LS(D)  &kp LS(F) &kp LS(G)    &trans             &kp LS(H) &kp LS(J)   &kp LS(K)  &kp LS(L) &trans          &trans
 &trans           &kp LS(Z)  &kp LS(X) &kp LS(C)  &kp LS(V) &kp LS(B)    &trans             &kp LS(N) &kp LS(M)   &trans     &trans    &trans          &trans
@@ -454,23 +454,23 @@
             >;
         };
 
-        nav {
+        nav {//         -           -           -           -           -           nav            -           -           -           -           -           nav            -           -           -           -           -           nav
             bindings = <
-&none            &kp N1           &kp N2           &kp N3             &kp N4             &kp N5         &kp UP_ARROW         &kp N6     &kp N7              &kp N8              &kp N9           &kp N0              &none
-&kp TAB          &kp Q            &kp W            &kp LA(UP)         &kp R              &kp T          &kp DOWN_ARROW       &none      &kp HOME            &kp UP_ARROW        &kp END          &none               &none
-&lt num GRAVE    &kp A            &kp S            &kp LA(DOWN)       &kp F              &kp G          &kp LEFT_ARROW       &none      &kp LEFT_ARROW      &kp DOWN_ARROW      &kp RIGHT_ARROW  &cmd_godef          &none
-&kp ESC          &kp Z            &kp X            &kp C              &kp V              &kp B          &kp RIGHT_ARROW      &none      &cmd_back           &none               &cmd_forward     &none               &lt ent ENTER
-&kp C_MUTE       &kp LCTRL        &kp LALT         &mo fnL            &l_sp              &none          &to base             &none      &r_sp               &mo fnR             &none            &none
+&trans           &kp N1           &kp N2           &kp N3             &kp N4             &kp N5         &kp UP_ARROW         &kp N6     &kp N7              &kp N8              &kp N9           &kp N0              &none
+&trans           &kp Q            &kp W            &kp LA(UP)         &kp R              &kp T          &kp DOWN_ARROW       &none      &kp HOME            &kp UP_ARROW        &kp END          &none               &none
+&trans           &kp LSHIFT       &kp LA(LEFT)     &kp LA(DOWN)       &kp LA(RIGHT)      &kp G          &kp LEFT_ARROW       &none      &kp LEFT_ARROW      &kp DOWN_ARROW      &kp RIGHT_ARROW  &kp RSHIFT          &none
+&trans           &kp Z            &kp X            &kp C              &kp V              &kp B          &kp RIGHT_ARROW      &none      &cmd_back           &cmd_godef          &cmd_forward     &none               &trans
+&trans           &kp LCTRL        &kp LALT         &mo fnL            &l_sp              &none          &to base             &kp RCTRL  &kp RALT            &kp RCMD            &none            &none
             >;
         };
 
-        fnL {
+        fnL {//         -           -           -           -           -           fnL            -           -           -           -           -           fnL            -           -           -           -           -           fnL
             bindings = <
 &none            &kp N1           &kp N2           &kp N3             &kp N4             &kp N5         &kp UP_ARROW         &kp N6     &kp N7              &kp N8              &kp N9           &kp N0              &none
-&kp TAB          &kp Q            &kp W            &kp LA(UP)         &kp R              &kp T          &kp DOWN_ARROW       &none      &kp HOME            &kp UP_ARROW        &kp END          &none               &none
-&lt num GRAVE    &kp LSHIFT       &kp LCTRL        &kp LALT           &kp RGUI           &kp G          &kp LEFT_ARROW       &none      &kp LEFT_ARROW      &kp DOWN_ARROW      &kp RIGHT_ARROW  &cmd_godef          &none
-&kp ESC          &kp Z            &kp X            &kp C              &kp V              &kp B          &kp RIGHT_ARROW      &none      &cmd_back           &none               &cmd_forward     &none               &lt ent ENTER
-&kp C_MUTE       &kp LCTRL        &kp LALT         &kp LGUI           &l_sp              &cmd_space     &to nav              &none      &r_sp               &mo R_base          &kp RALT         &kp RCTRL
+&trans           &kp Q            &kp W            &kp LA(UP)         &kp R              &kp T          &kp DOWN_ARROW       &none      &kp HOME            &kp UP_ARROW        &kp END          &none               &none
+&trans           &kp LSHIFT       &kp LCTRL        &kp LALT           &kp RGUI           &kp G          &kp LEFT_ARROW       &none      &kp LEFT_ARROW      &kp DOWN_ARROW      &kp RIGHT_ARROW  &none               &none
+&trans           &kp Z            &kp X            &kp C              &kp V              &kp B          &kp RIGHT_ARROW      &none      &cmd_back           &cmd_godef          &cmd_forward     &none               &trans
+&trans           &kp LCTRL        &kp LALT         &kp LGUI           &l_sp              &cmd_space     &to nav              &none      &r_sp               &mo R_base          &none            &none
             >;
         };
 
@@ -484,60 +484,60 @@
             >;
         };
 
-        fnR {
+        fnR {//         -           -           -           -           -           fnR            -           -           -           -           -           fnR             -           -           -           -           -          fnR
             bindings = <
 &none            &kp N1           &kp N2           &kp N3             &kp N4             &kp N5         &kp UP_ARROW         &kp N6     &kp N7              &kp N8              &kp N9           &kp N0              &none
-&kp TAB          &kp Q            &kp W            &kp E              &kp R              &kp T          &kp DOWN_ARROW       &none      &kp HOME            &kp UP_ARROW        &kp END          &none               &none
-&lt num GRAVE    &kp A            &kp S            &kp D              &kp F              &kp G          &kp LEFT_ARROW       &none      &kp RGUI            &kp RALT            &kp RCTRL        &kp RSHIFT          &none
-&kp ESC          &kp Z            &kp X            &kp C              &kp V              &kp B          &kp RIGHT_ARROW      &none      &cmd_back           &none               &cmd_forward     &none               &lt ent ENTER
-&kp C_MUTE       &kp LCTRL        &kp LALT         &mo L_base         &l_sp              &none          &to nav              &none      &r_sp               &kp RGUI            &kp RALT         &kp RCTRL
+&trans           &kp Q            &kp W            &kp E              &kp R              &kp T          &kp DOWN_ARROW       &none      &kp HOME            &kp UP_ARROW        &kp END          &none               &none
+&trans           &kp A            &kp S            &kp D              &kp F              &kp G          &kp LEFT_ARROW       &none      &kp RGUI            &kp RALT            &kp RCTRL        &kp RSHIFT          &none
+&trans           &kp Z            &kp X            &kp C              &kp V              &kp B          &kp RIGHT_ARROW      &none      &cmd_back           &none               &cmd_forward     &none               &lt ent ENTER
+&trans           &kp LCTRL        &kp LALT         &mo L_base         &l_sp              &none          &to nav              &none      &r_sp               &kp RGUI            &kp RALT         &kp RCTRL
             >;
         };
 
         L_base { // left side base, right side trans (should be synchronized with 'base')
             bindings = <
 &none            &kp N1     &kp N2    &kp N3    &kp N4  &kp N5  &kp UP_ARROW     &trans  &trans  &trans  &trans  &trans  &trans
-&kp TAB          &kp Q      &kp W     &kp E     &kp R   &kp T   &kp DOWN_ARROW   &trans  &trans  &trans  &trans  &trans  &trans
-&lt num GRAVE    &kp A      &kp S     &kp D     &kp F   &kp G   &kp LEFT_ARROW   &trans  &trans  &trans  &trans  &trans  &trans
-&kp ESC          &kp Z      &kp X     &kp C     &kp V   &kp B   &kp RIGHT_ARROW  &trans  &trans  &trans  &trans  &trans  &trans
-&kp C_MUTE       &kp LCTRL  &kp LALT  &kp LGUI  &l_sp   &trans  &tonav           &trans  &trans  &trans  &trans  &trans
+&trans           &kp Q      &kp W     &kp E     &kp R   &kp T   &kp DOWN_ARROW   &trans  &trans  &trans  &trans  &trans  &trans
+&trans           &kp A      &kp S     &kp D     &kp F   &kp G   &kp LEFT_ARROW   &trans  &trans  &trans  &trans  &trans  &trans
+&trans           &kp Z      &kp X     &kp C     &kp V   &kp B   &kp RIGHT_ARROW  &trans  &trans  &trans  &trans  &trans  &trans
+&trans           &kp LCTRL  &kp LALT  &kp LGUI  &l_sp   &trans  &tonav           &trans  &trans  &trans  &trans  &trans
             >;
         };
 
 // `~ !@#$%^&*() _+[]\{}|:"<>?
 // ',./;-=
 
-        num {
+        num {//           -           -           -           -           -           num            -           -           -           -           -           num            -           -           -           -           -           num                                                                                                                                             
             bindings = <
 &none            &none            &none            &none              &none              &none          &kp UP_ARROW         &none          &none               &none               &none            &none               &trans
-&kp TAB          &kp LS(N1)       &kp LS(N2)       &kp LS(N3)         &kp LS(N4)         &kp LS(N5)     &kp DOWN_ARROW       &kp LS(N6)     &kp LS(N7)          &kp LS(BSLH)        &kp LS(N9)       &kp LS(N0)          &trans
+&none            &kp LS(N1)       &kp LS(N2)       &kp LS(N3)         &kp LS(N4)         &kp LS(N5)     &kp DOWN_ARROW       &kp LS(N6)     &kp LS(N7)          &kp LS(BSLH)        &kp LS(N9)       &kp LS(N0)          &trans
 &none            &kp N1           &kp N2           &kp N3             &kp N4             &kp N5         &kp LEFT_ARROW       &kp N6         &kp N7              &kp N8              &kp N9           &kp N0              &kp EQUAL
-&kp ESC          &uc 0x1F596 0    &none            &none              &none              &none          &kp RIGHT_ARROW      &none          &kp PLUS            &kp COMMA           &kp DOT          &ltr skbL FSLH      &lt ent ENTER
-&kp C_MUTE       &none            &none            &trans             &l_sp              &none          &none                &none          &r_sp               &exit_num           &none            &none
+&none            &uc 0x1F596 0    &none            &none              &none              &none          &kp RIGHT_ARROW      &none          &none               &trans              &trans           &trans              &trans
+&none            &none            &none            &trans             &l_sp              &kp MINUS      &none                &kp PLUS       &r_sp               &exit_num           &none            &none
             >;
         };
 
-        symb {
+        symb {//           -           -           -          -           -           symb           -           -           -           -           -           symb           -           -           -           -           -           symb
             bindings = <
-&none            &none            &none            &none              &none              &none          &kp UP_ARROW         &none          &none               &none               &none            &none               &kp LS(F13)
-&none            &kp N1           &kp N2           &kp N3             &kp N4             &kp N5         &kp DOWN_ARROW       &kp N6         &kp N7              &kp N8              &kp N9           &kp N0              &kp LS(F14)
-&none            &kp LS(N1)       &kp LS(N2)       &kp LS(N3)         &kp LS(N4)         &kp LS(N5)     &kp LEFT_ARROW       &kp LS(N6)     &kp LS(N7)          &kp LS(N8)          &kp LS(N9)       &kp LS(N0)          &kp LS(F14)
-&kp ESC          &kp LS(N1)       &kp LS(N2)       &kp LS(N3)         &kp LS(N4)         &kp LS(N5)     &kp RIGHT_ARROW      &kp LS(N6)     &kp LS(N7)          &kp LS(BSLH)        &kp LS(N9)       &kp LS(N0)          &kp LS(F14)
-&kp C_MUTE       &none            &none            &trans             &l_sp              &none          &none                &none          &r_sp               &exit_symb          &none            &none
+&none            &none            &none            &none              &none              &none          &kp UP_ARROW         &none          &none               &none               &none            &none               &trans
+&none            &kp N1           &kp N2           &kp N3             &kp N4             &kp N5         &kp DOWN_ARROW       &kp N6         &kp N7              &kp N8              &kp N9           &kp N0              &trans
+&none            &kp LS(N1)       &kp LS(N2)       &kp LS(N3)         &kp LS(N4)         &kp LS(N5)     &kp LEFT_ARROW       &kp LS(N6)     &kp LS(N7)          &kp LS(N8)          &kp LS(N9)       &kp LS(N0)          &kp EQUAL
+&trans           &kp LS(N1)       &kp LS(N2)       &kp LS(N3)         &kp LS(N4)         &kp LS(N5)     &kp RIGHT_ARROW      &trans         &trans              &trans              &trans           &trans              &trans
+&trans           &none            &none            &trans             &l_sp              &kp MINUS      &none                &kp PLUS       &r_sp               &exit_symb          &none            &none
             >;
         };
 
-        skbL {
+        skbL {//          -           -           -           -           -           skbL            -           -           -           -           -           skbL            -           -           -           -           -          skbL
             bindings = <
 &none            &kp N1           &kp N2           &kp N3             &kp N4             &kp N5         &kp UP_ARROW         &none      &none               &none               &none            &none               &none
-&kp TAB          &kp F13          &kp F14          &kp F15            &kp F16            &kp T          &kp DOWN_ARROW       &none      &kp LBKT            &kp APOS            &kp RBKT         &kp LS(SEMI)        &none
-&kp GRAVE        &kp F17          &kp F18          &kp F19            &kp F20            &kp G          &kp LEFT_ARROW       &none      &kp LS(N9)          &kp EQUAL           &kp LS(N0)       &kp SEMI            &none
-&kp ESC          &kp F21          &kp F22          &kp F23            &kp F24            &kp B          &kp RIGHT_ARROW      &none      &kp LBRC            &kp LS(APOS)        &kp RBRC         &kp LS(FSLH)        &lt ent ENTER
-&kp C_MUTE       &kp BSLH         &kp LS(BSLH)     &kp FSLH           &l_sp              &none          &none                &none      &r_sp               &kp RGUI            &kp RALT         &kp RCTRL
+&trans           &kp F13          &kp F14          &kp F15            &kp F16            &kp T          &kp DOWN_ARROW       &none      &kp LBKT            &kp APOS            &kp RBKT         &kp LS(SEMI)        &none
+&trans           &kp F17          &kp F18          &kp F19            &kp F20            &kp G          &kp LEFT_ARROW       &none      &kp LS(N9)          &kp EQUAL           &kp LS(N0)       &kp SEMI            &none
+&trans           &kp F21          &kp F22          &kp F23            &kp F24            &kp B          &kp RIGHT_ARROW      &none      &kp LBRC            &kp LS(APOS)        &kp RBRC         &kp LS(FSLH)        &lt ent ENTER
+&trans           &kp BSLH         &kp LS(BSLH)     &kp FSLH           &l_sp              &none          &none                &none      &r_sp               &kp RGUI            &kp RALT         &kp RCTRL
             >;
         };
 
-        skbR {
+        skbR {//          -           -           -           -           -           skbR            -           -           -           -           -           skbR            -           -           -           -           -          skbR
             bindings = <
 &none  &none  &none  &none  &none  &none  &kp UP_ARROW     &none          &none          &none        &none         &none        &kp RS(F24)
 &none  &none  &none  &none  &none  &none  &kp DOWN_ARROW   &kp RS(F13)    &kp RS(F14)    &kp RS(F15)  &kp RS(F16)   &kp RS(F17)  &kp RS(F23)
@@ -547,7 +547,7 @@
             >;
         };
 
-        esc {
+        esc {//           -           -           -           -           -           esc             -           -           -           -           -           esc             -           -           -           -           -          esc
             bindings = <
 &bootloader  &bt_0  &bt_1  &bt_2  &bt_3  &bt_4  &kp UP_ARROW     &none  &none  &none  &none  &none  &none
 &none        &none  &none  &none  &none  &none  &kp DOWN_ARROW   &none  &none  &none  &none  &none  &none
@@ -557,7 +557,7 @@
             >;
         };
 
-        ent {
+        ent {//           -           -           -           -           -           ent             -           -           -           -           -           ent             -           -           -           -           -          ent
             bindings = <
 &none  &none  &none  &none  &none  &none  &kp UP_ARROW     &none  &none  &none  &none  &none  &bootloader
 &none  &none  &none  &none  &none  &none  &kp DOWN_ARROW   &none  &none  &none  &none  &none  &none
@@ -567,21 +567,21 @@
             >;
         };
 
-        sp_l { // (should be synchronized with 'base')
+        sp_l { // (should be synchronized with 'base')        -           -           sp_l            -           -           -           -           -           sp_l            -           -           -           -           -          sp_l
             bindings = <
 &none          &skp N1  &skp N2  &skp N3  &skp N4  &skp N5   &skp UP_ARROW      &skp N6   &skp N7  &skp N8     &skp N9   &skp N0    &skp MINUS
-&skp TAB       &skp Q   &skp W   &skp E   &skp R   &skp T    &skp DOWN_ARROW    &skp Y    &skp U   &skp I      &skp O    &skp P     &skp BSLH
-&lt num GRAVE  &skp A   &skp S   &skp D   &skp F   &skp G    &skp LEFT_ARROW    &skp H    &skp J   &skp K      &skp L    &skp SEMI  &skp APOS
+&lt num GRAVE  &skp Q   &skp W   &skp E   &skp R   &skp T    &skp DOWN_ARROW    &skp Y    &skp U   &skp I      &skp O    &skp P     &skp BSLH
+&skp TAB       &skp A   &skp S   &skp D   &skp F   &skp G    &skp LEFT_ARROW    &skp H    &skp J   &skp K      &skp L    &skp SEMI  &skp APOS
 &skp ESC       &skp Z   &skp X   &skp C   &skp V   &skp B    &skp RIGHT_ARROW   &skp N    &skp M   &skp COMMA  &skp DOT  &skp FSLH  &skp ENTER
 &kp C_MUTE     &none    &none    &none    &none    &none     &to nav            &skp R    &kp BSPC &none       &none     &none
             >;
         };
 
-        sp_r { // (should be synchronized with 'base')
+        sp_r { // (should be synchronized with 'base')        -           -           sp_r            -           -           -           -           -           sp_r            -           -           -           -           -          sp_r
             bindings = <
 &none            &skp N1     &skp N2    &skp N3    &skp N4   &skp N5   &skp UP_ARROW     &skp N6  &skp N7        &skp N8     &skp N9    &skp N0         &skp MINUS
-&skp TAB         &skp Q      &skp W     &skp E     &skp R    &skp T    &skp DOWN_ARROW   &skp Y   &skp U         &skp I      &skp O     &skp P          &skp BSLH
-&lt num GRAVE    &skp A      &skp S     &skp D     &skp F    &skp G    &skp LEFT_ARROW   &skp H   &skp J         &skp K      &skp L     &skp SEMI       &skp APOS
+&lt num GRAVE    &skp Q      &skp W     &skp E     &skp R    &skp T    &skp DOWN_ARROW   &skp Y   &skp U         &skp I      &skp O     &skp P          &skp BSLH
+&skp TAB         &skp A      &skp S     &skp D     &skp F    &skp G    &skp LEFT_ARROW   &skp H   &skp J         &skp K      &skp L     &skp SEMI       &skp APOS
 &skp ESC         &skp Z      &skp X     &skp C     &skp V    &skp B    &skp RIGHT_ARROW  &skp N   &skp M         &skp COMMA  &skp DOT   &skp FSLH       &skp ENTER
 &kp C_MUTE       &none       &none      &none      &kp DEL   &none     &to nav           &none    &none          &none       &none      &none
             >;
@@ -590,7 +590,7 @@
         // fnL variant: same left-hand modifiers (shift/ctrl/alt/gui on asdf)
         // but right hand has F-keys on yuiop\ and digits on hjkl;.
         // Activated by tap-then-hold of l_fn (see caps_or_fnLn).
-        fnLn {
+        fnLn {//           -           -           -           -           -           fnLn            -           -           -           -           -           fnLn           -           -           -           -           -          fnLn
             bindings = <
 &trans  &trans      &trans      &trans      &trans      &trans      &trans  &trans   &trans   &trans   &trans   &trans    &kp F12
 &trans  &trans      &trans      &trans      &trans      &trans      &trans  &kp F6   &kp F7   &kp F8   &kp F9   &kp F10   &kp F11
@@ -603,7 +603,7 @@
         // Mirror of fnLn for r_fn: keeps fnR's right-hand modifiers
         // (gui/alt/ctrl/shift on jkl;) and adds F-keys on qwert and digits
         // on asdfg. Activated by tap-then-hold of r_fn (see nums_or_fnRn).
-        fnRn {
+        fnRn {//           -           -           -           -           -           fnRn             -           -           -           -           -          fnRn           -           -           -           -           -          fnRn
             bindings = <
 &trans   &trans    &trans   &trans   &trans   &trans   &trans   &trans   &trans      &trans      &trans      &trans      &trans
 &trans   &kp F1    &kp F2   &kp F3   &kp F4   &kp F5   &trans   &trans   &trans      &trans      &trans      &trans      &trans
@@ -613,6 +613,14 @@
             >;
         };
     };
+};
+
+&num_word {
+    continue-list = <BACKSPACE DELETE DOT COMMA MINUS PLUS EQUAL UNDERSCORE SLASH>;
+};
+
+&caps_layer {
+    continue-list = <BACKSPACE DELETE UNDERSCORE MINUS>;
 };
 
 
