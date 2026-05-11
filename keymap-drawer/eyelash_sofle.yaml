@@ -54,8 +54,8 @@ layers:
   - {t: /, h: '9', s: '?'}
   - {t: '$$mdi:keyboard-return$$', h: '12'}
   - $$mdi:volume-off$$
-  - $$mdi:apple-keyboard-control$$
-  - $$mdi:apple-keyboard-option$$
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '&td_shift_caps', h: '3'}
   - {t: '$$mdi:keyboard-space$$', h: '13'}
   - {t: '[', s: '{'}
@@ -184,9 +184,9 @@ layers:
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
-  - $$mdi:apple-keyboard-control$$
-  - $$mdi:apple-keyboard-option$$
-  - '3'
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:keyboard-space$$', h: '13'}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '0', h: toggle}
